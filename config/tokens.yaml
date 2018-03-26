@@ -1,0 +1,16 @@
+- name: Buzz Lightyear
+  identifiers:
+  - 0479432A3D2D80
+  playlists:
+  - name: Toy Story
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Mike Wazowski
+  identifiers:
+  - 04C779522E2B80
+  playlists:
+  - name: Monsters, Inc
+    mode: in_order
+  - name: Best of Disney
+    mode: shuffle
