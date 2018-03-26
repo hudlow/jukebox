@@ -1,4 +1,4 @@
-import logging, time, nfc, mpd, yaml, threading, md5
+import logging, time, nfc, mpd, yaml, threading
 from token import Token
 
 class Jukebox:
@@ -86,7 +86,11 @@ class Jukebox:
             self.lock.release()
             return False
 
-        print "Stop music for " + self.current_token.name
+        if (self.current_token != None):
+            print "Stop music for " + self.current_token.name
+        else:
+            print "Stop music"
+
         self.current_token = None
 
         self.lock.release()
