@@ -1,43 +1,56 @@
-import logging, time, nfc, mpd, yaml, threading
+import sys, logging, time, nfc, mpd, yaml, threading
+
 from token import Token
 
 class Jukebox:
-    def __init__(self, token_definition_path="config/tokens.yaml", hostname="localhost", port="6600", timeout=10):
-        self.init_nfc_client()
-        self.init_tokens(token_definition_path)
-        self.init_music_client(hostname, port, timeout)
+    def __init__(self, token_definition_path, hostname, port, timeout):
         self.current_token = None
+        self.last_token_event = None
+        self.logger = self.get_logger()
+        self.nfc_client = self.get_nfc_client()
+        self.tokens = self.get_tokens(token_definition_path)
+        self.music_client = self.get_music_client(hostname, port, timeout)
         self.lock = threading.Lock()
 
-    def init_nfc_client(self):
-        self.nfc_client = nfc.ContactlessFrontend('usb')
-        self.token_event("Initialize", "None")
+    def __delete__(self, instance):
+        self.disconnect()
+        del self.music_client
+        del self.nfc_client
 
-    def init_tokens(self, token_definition_path):
-        stream = open(token_definition_path, 'r')
-        definitions = yaml.load(stream)
-        self.tokens = Token.from_definitions(definitions)
+    def get_logger(self):
+        logger = logging.getLogger("hudlow.jukebox")
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(logging.StreamHandler(sys.stdout))
 
-    def init_music_client(self, hostname, port, timeout):
-        self.music_client = mpd.MPDClient()
-        self.music_client.timeout = timeout
-        self.music_client.idletimeout = None
-        self.music_client_hostname = hostname
-        self.music_client_port = port
+        return logger
 
-    def token_event(self, type, name):
+    def get_nfc_client(self):
+        self.create_token_event("initialize", None)
+        return nfc.ContactlessFrontend('usb')
+
+    def get_tokens(self, token_definition_path):
+        with open(token_definition_path, 'r') as file:
+            definitions = yaml.load(file)
+            return Token.from_definitions(definitions)
+
+    def get_music_client(self, hostname, port, timeout):
+        music_client = mpd.MPDClient()
+        music_client.timeout = timeout
+        music_client.idletimeout = None
+        music_client.connect(hostname, port)
+
+        return music_client
+
+    def create_token_event(self, type, token):
+        name = token.name if token != None else "None"
         self.last_token_event = (type, name, time.time())
         return self.last_token_event
-
-    def connect(self):
-        self.music_client.connect(self.music_client_hostname, self.music_client_port)
 
     def disconnect(self):
         self.music_client.close()
         self.music_client.disconnect()
 
     def start(self):
-        self.connect()
         self.nfc_client.connect(
             rdwr = {
                 'on-connect': self.tag_connect,
@@ -46,52 +59,43 @@ class Jukebox:
             }
         )
 
+    def queue_music_for(self, token):
+        self.logger.info("Starting music for " + token.name)
+        # start music here
+
+    def stop_music(self):
+        self.logger.info("Stopping music")
+        # stop music here
+
     def tag_connect(self, tag):
-        self.lock.acquire()
+        with self.lock:
+            token = Token.find_token(tag)
+            event = self.create_token_event("connect", token)
 
-        token = Token.find_token(tag)
-        name = token.name if token != None else "None"
-        event = self.token_event("connect", name)
+            if (token != self.current_token):
+                self.current_token = token
 
-        if (token == self.current_token):
-            self.lock.release()
+                if (token != None):
+                    self.queue_music_for(token)
+                else:
+                    self.stop_music()
+
             return True
 
-        self.current_token = token
-
-        if (token != None):
-            print "Start music for " + token.name
-
-        self.lock.release()
-        return True
-
     def tag_release(self, tag):
-        self.lock.acquire()
+        with self.lock:
+            token = Token.find_token(tag)
+            event = self.create_token_event("release", token)
 
-        token = Token.find_token(tag)
-        name = token.name if token != None else "None"
-        event = self.token_event("connect", name)
+            thread = threading.Thread(target=self.check_if_token_gone, args=(event,))
+            thread.start()
 
-        thread = threading.Thread(target=self.check_if_token_gone, args=(event,))
-        thread.start()
-
-        self.lock.release()
-        return False
+            return False
 
     def check_if_token_gone(self, event):
         time.sleep(3)
-        self.lock.acquire()
 
-        if (self.last_token_event != event):
-            self.lock.release()
-            return False
-
-        if (self.current_token != None):
-            print "Stop music for " + self.current_token.name
-        else:
-            print "Stop music"
-
-        self.current_token = None
-
-        self.lock.release()
-        return True
+        with self.lock:
+            if (self.last_token_event == event):
+                self.current_token = None
+                self.stop_music()

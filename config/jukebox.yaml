@@ -1,0 +1,6 @@
+tokens:
+  definition_path: config/tokens.yaml
+music_client:
+  hostname: localhost
+  port: 6600
+  timeout: 10
