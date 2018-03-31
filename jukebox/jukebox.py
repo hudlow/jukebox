@@ -9,7 +9,10 @@ class Jukebox:
         self.logger = self.get_logger()
         self.nfc_client = self.get_nfc_client()
         self.tokens = self.get_tokens(token_definition_path)
-        self.music_client = self.get_music_client(hostname, port, timeout)
+        self.hostname = hostname
+        self.port = port
+        self.music_client = self.get_music_client(timeout)
+        self.connect_music_client()
         self.lock = threading.Lock()
 
     def __delete__(self, instance):
@@ -26,29 +29,45 @@ class Jukebox:
 
     def get_nfc_client(self):
         self.create_token_event("initialize", None)
+
         return nfc.ContactlessFrontend('usb')
 
     def get_tokens(self, token_definition_path):
         with open(token_definition_path, 'r') as file:
             definitions = yaml.load(file)
+
             return Token.from_definitions(definitions)
 
-    def get_music_client(self, hostname, port, timeout):
+    def get_music_client(self, timeout):
         music_client = mpd.MPDClient()
         music_client.timeout = timeout
         music_client.idletimeout = None
-        music_client.connect(hostname, port)
 
         return music_client
+
+    def connect_music_client(self):
+        self.music_client.connect(self.hostname, self.port)
+
+    def ensure_music_client_connection(self):
+        try:
+            self.music_client.ping()
+        except mpd.ConnectionError:
+            self.logger.info("Reconnecting...")
+            self.connect_music_client()
 
     def create_token_event(self, type, token):
         name = token.name if token != None else "None"
         self.last_token_event = (type, name, time.time())
+
         return self.last_token_event
 
     def disconnect(self):
+        try:
+            self.music_client.ping()
+        except ConnectionError:
+            return
+
         self.music_client.close()
-        self.music_client.disconnect()
 
     def start(self):
         self.nfc_client.connect(
@@ -61,11 +80,29 @@ class Jukebox:
 
     def queue_music_for(self, token):
         self.logger.info("Starting music for " + token.name)
-        # start music here
+
+        self.ensure_music_client_connection()
+        self.music_client.clear()
+
+        count = 0
+        for playlist in token.playlists:
+            length = len(self.music_client.listplaylistinfo(playlist[0]))
+            
+            self.music_client.load(playlist[0])
+
+            if (playlist[0] == "shuffle"):
+                self.music_client.shuffle(str(count) + ":" + str(count+length))
+
+            count += length
+
+        self.music_client.play()
 
     def stop_music(self):
         self.logger.info("Stopping music")
-        # stop music here
+
+        self.ensure_music_client_connection()
+        self.music_client.stop()
+        self.music_client.clear()
 
     def tag_connect(self, tag):
         with self.lock:
