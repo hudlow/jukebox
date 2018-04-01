@@ -4,7 +4,7 @@ class Player:
     def __init__(self, logger, hostname, port, timeout):
         self.logger = logger
         self.hostname = hostname
-        self.port = port+1
+        self.port = port
         self.music_client = self.get_music_client(timeout)
         self.connect_music_client()
 
