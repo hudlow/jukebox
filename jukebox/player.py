@@ -27,7 +27,7 @@ class Player:
             return True
         except socket.error:
             self.logger.error("Failed to connect to MPD")
-            return
+            return False
 
     def disconnect(self):
         try:
@@ -39,50 +39,64 @@ class Player:
 
     def proxy(self, name, *arguments):
         attempt = 1
+        assume_connected = True
 
         while (attempt < 5):
-            if attempt > 1:
-                seconds = math.pow(2, attempt-1)
+            if attempt > 2:
+                seconds = math.pow(2, attempt-2)
                 self.logger.warning("Waiting for " + str(seconds) + " seconds...")
                 time.sleep(seconds)
 
-            try:
-                return getattr(self.music_client, name)(*arguments)
-            except mpd.ConnectionError:
+            if not assume_connected:
                 self.logger.warning("Attempting to reconnect to MPD")
-                attempt += 1
-                self.connect_music_client()
+                assume_connected = self.connect_music_client()
 
-        self.logger.error("Failed to send command to MPD")
-        return False
+            if assume_connected:
+                try:
+                    return getattr(self.music_client, name)(*arguments)
+                except mpd.ConnectionError:
+                    pass
+
+                assume_connected = False
+                self.logger.warning("Could not send command")
+
+            attempt += 1
+
+        raise PlayerCommandError("Failed to send command to MPD")
 
     def queue_playlists(self, playlists):
-        if self.ping() is False:
-            return
+        try:
+            self.clear()
 
-        self.clear()
+            count = 0
+            for playlist in playlists:
+                songs = self.listplaylistinfo(playlist[0])
 
-        count = 0
-        for playlist in playlists:
-            songs = self.listplaylistinfo(playlist[0])
+                length = len(songs)
 
-            if not songs:
-                return
+                self.load(playlist[0])
 
-            length = len(songs)
+                if (playlist[0] == "shuffle"):
+                    self.shuffle(str(count) + ":" + str(count+length))
 
-            self.load(playlist[0])
+                count += length
 
-            if (playlist[0] == "shuffle"):
-                self.shuffle(str(count) + ":" + str(count+length))
+            self.play()
 
-            count += length
-
-        self.play()
+            return True
+        except PlayerCommandError:
+            self.logger.error("Failed to play music")
+            return False
 
     def stop_music(self):
-        if self.ping() is False:
-            return
+        try:
+            self.stop()
+            self.clear()
 
-        self.stop()
-        self.clear()
+            return True
+        except PlayerCommandError:
+            self.logger.error("Failed to stop music")
+            return False
+
+class PlayerCommandError(Exception):
+    pass
