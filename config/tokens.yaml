@@ -12,6 +12,14 @@
     mode: shuffle
   - name: Best of Disney
     mode: shuffle
+- name: Anakin Skywalker
+  identifiers:
+  - 0400EEDA073E81
+  playlists:
+  - name: Anakin Skywalker
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
 - name: Anger
   identifiers:
   - 04498282184480
