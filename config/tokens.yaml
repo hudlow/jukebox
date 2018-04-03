@@ -1,3 +1,55 @@
+- name: Ahsoka Tano
+  identifiers:
+  - 04EA43E2073E80
+  playlists:
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Aladdin
+  identifiers:
+  - 04A7DB02773B80
+  playlists:
+  - name: Aladdin
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Anger
+  identifiers:
+  - 04498282184480
+  playlists:
+  - name: Dan's Favorites
+    mode: shuffle
+- name: Anna
+  identifiers:
+  - 0408956A783B80
+  playlists:
+  - name: Frozen
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Barbossa
+  identifiers:
+  - 042CE50A1D3180
+  playlists:
+  - name: Pirates of the Caribbean
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Black Widow
+  identifiers:
+  - 04482ECA2C3580
+  playlists:
+  - name: Marvel
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Boba Fett
+  identifiers:
+  - 04265EEA5B4080
+  playlists:
+  - name: Boba Fett
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
 - name: Buzz Lightyear
   identifiers:
   - 0479432A3D2D80
@@ -6,11 +58,240 @@
     mode: shuffle
   - name: Best of Disney
     mode: shuffle
+- name: Chewbacca
+  identifiers:
+  - 04B3C43A5C4080
+  playlists:
+  - name: Chewbacca
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Darth Vader
+  identifiers:
+  - 04E1777AC44280
+  playlists:
+  - name: Darth Vader
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Disgust
+  identifiers:
+  - 04995AC2413D80
+  playlists:
+  - name: Taylor Swift
+    mode: shuffle
+  - name: Best of Country
+    mode: shuffle
+- name: Finn
+  identifiers:
+  - 04417DF2EA4580
+  - 041A8D127A4381
+  playlists:
+  - name: Finn
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Han Solo
+  identifiers:
+  - 04803F7AC64280
+  playlists:
+  - name: Han Solo
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Jack Sparrow
+  identifiers:
+  - 04BD0E82C22290
+  - 04DC841A173180
+  playlists:
+  - name: Pirates of the Caribbean
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Jasmine
+  identifiers:
+  - 04A653B3B81B80
+  playlists:
+  - name: Aladdin
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Joy
+  identifiers:
+  - 04B8DC92173F80
+  playlists:
+  - name: Joyful
+    mode: shuffle
+- name: Kylo Ren
+  identifiers:
+  - 048BA3E2F44380
+  playlists:
+  - name: Kylo Ren
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Luke Skywalker
+  identifiers:
+  - 0443864A153A80
+  playlists:
+  - name: Luke Skywalker
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Mad Hatter
+  identifiers:
+  - 04B9EAAAD64080
+  playlists:
+  - name: Alice in Wonderland
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Malificent
+  identifiers:
+  - 04AC63EA982F80
+  playlists:
+  - name: Disney Villains
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Mater
+  identifiers:
+  - 043780421F3181
+  playlists:
+  - name: Cars
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Merida
+  identifiers:
+  - 04BA28227B3B80
+  playlists:
+  - name: Brave
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
 - name: Mike Wazowski
   identifiers:
   - 04C779522E2B80
+  - 045B3232332D80
   playlists:
   - name: Monsters, Inc
     mode: in_order
   - name: Best of Disney
+    mode: shuffle
+- name: Mr. Incredible
+  identifiers:
+  - 049D5B4A193180
+  playlists:
+  - name: The Incredibles
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Mrs. Incredible
+  identifiers:
+  - 04AE12121D3180
+  playlists:
+  - name: The Incredibles
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Mulan
+  identifiers:
+  - 0439FC5A9F3380
+  playlists:
+  - name: Mulan
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Nemo
+  identifiers:
+  - 046434325C4080
+  playlists:
+  - name: Finding Nemo
+    mode: in_order
+  - name: Best of Disney
+    mode: shuffle
+- name: Olaf
+  identifiers:
+  - 049762A3B91B80
+  playlists:
+  - name: Frozen
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Rey
+  identifiers:
+  - 04923A32EB4580
+  playlists:
+  - name: Rey
+    mode: shuffle
+  - name: Best of Star Wars
+    mode: shuffle
+- name: Rocket
+  identifiers:
+  - 043B28F2783B80
+  playlists:
+  - name: Guardians of the Galaxy
+    mode: shuffle
+  - name: Best of Rock
+    mode: shuffle
+- name: Sadness
+  identifiers:
+  - 04A4E7A27C4380
+  playlists:
+  - name: Sad
+    mode: shuffle
+- name: Star-Lord
+  identifiers:
+  - 04800B723F3D84
+  playlists:
+  - name: Guardians of the Galaxy
+    mode: shuffle
+  - name: Best of Rock
+    mode: shuffle
+- name: Stitch
+  identifiers:
+  - 04FE40429D3D80
+  - 04F8A9FA983380
+  playlists:
+  - name: Lilo and Stitch
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Sully
+  identifiers:
+  - 048DC4F2183180
+  - 041DC18ADE2B81
+  playlists:
+  - name: Monsters, Inc
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Thor
+  identifiers:
+  - 04FAEF3A753B80
+  playlists:
+  - name: Marvel
+    mode: shuffle
+  - name: Best of Disney
+    mode: shuffle
+- name: Tinker Bell
+  identifiers:
+  - 048041BA043A80
+  playlists:
+  - name: Best of Disney
+    mode: shuffle
+- name: Tonto
+  identifiers:
+  - 04E1E83A3A2D80
+  playlists:
+  - name: Best of Country
+    mode: shuffle
+- name: Yoda
+  identifiers:
+  - 0483A7FA9B3D80
+  playlists:
+  - name: Yoda
+    mode: shuffle
+  - name: Best of Star Wars
     mode: shuffle
