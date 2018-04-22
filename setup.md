@@ -16,11 +16,10 @@ The keyboard layout needs to be changed for keys to be mapped correctly. The def
 
 ## Setup Wifi
 
-1. Backup `wpa_supplicant.conf` with `sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /home/pi/wpa_supplicant.conf.bk`.
-2. Add a network to the config with `wpa_passphrase "SSID" "PASSWORD" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf`.
-3. Remove the plaintext password with `nano /etc/wpa_supplicant/wpa_supplicant.conf`.
-4. Run `wpa_cli -i wlan0 reconfigure`.
-5. Check for an IP address with `ifconfig wlan0`.
+1. Add a network to the config with `wpa_passphrase "SSID" "PASSWORD" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf`.
+2. Remove the plaintext password with `nano /etc/wpa_supplicant/wpa_supplicant.conf`.
+3. Run `wpa_cli -i wlan0 reconfigure`.
+4. Check for an IP address with `ifconfig wlan0`.
 
 Alternatively, I believe setup can be done with `sudo raspi-config`.
 
@@ -41,7 +40,26 @@ Enable and start SSH on the Pi.
 
 ## MPD
 
-Install `mpd` with `sudo apt-get install mpd`.
+1. `sudo apt-get install mpd`
+2. `cd ~`
+3. `mkdir music`
+4. `mkdir playlists`
+5. Add user `mpd` to group `pi` with `sudo usermod -a -G pi mpd`.
+6. Allow group read/write access to `music` and `playlist` directories with `sudo chmod ug+rw music playlists`.
+7. Edit the `mpd` config with `sudo nano /etc/mpd.conf`.
+8. Change `music_directory` to `"/home/pi/music"`.
+9. Change `playlist_directory` to `"/home/pi/playlists"`.
+10. Restart `mpd` with `sudo systemctl restart mpd`.
+
+## Configure USB Audio Interface
+
+I'm using a [UGREEN USB audio interface](https://www.amazon.com/dp/B06XP5R449). It requires a little setup.
+
+1. Verify presence with `lsusb`.
+2. Verify presence with `amixer`.
+3. `sudo nano /usr/share/alsa/alsa.conf`
+4. Change `defaults.ctl.card` and `defaults.pcm.card` to `1`.
+5. Reboot.
 
 ## Dependencies
 
